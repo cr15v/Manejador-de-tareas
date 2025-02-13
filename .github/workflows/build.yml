@@ -23,8 +23,8 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Ejecutar pruebas con Maven y generar el informe de cobertura
-        run: mvn clean verify
+      - name: Ejecutar pruebas con cobertura y generar reporte JaCoCo
+        run: mvn clean verify -Pcoverage  # Ejecuta el perfil coverage para generar el reporte
 
       - name: Ejecutar análisis con SonarCloud
         uses: SonarSource/sonarqube-scan-action@v4.1.0
@@ -35,4 +35,4 @@ jobs:
             -Dsonar.organization=cr15v
             -Dsonar.projectKey=cr15v_manejador-de-tareas
             -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.jacoco.reportPaths=target/jacoco.exec  # Ruta al informe de cobertura
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml  # Especifica la ruta del reporte
