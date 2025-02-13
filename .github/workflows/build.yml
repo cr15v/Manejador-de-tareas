@@ -11,7 +11,7 @@ on:
 jobs:
   sonar:
     name: SonarCloud Scan
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout código
