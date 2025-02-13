@@ -1,59 +1,41 @@
+package com.example;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 public class Calculadora {
+    public static int ultimoResultado = 0;
 
-    public int sumar(int a, int b) {
-        return a + b;
+    public static int sumar(int a, int b) {
+        ultimoResultado = a + b;
+        System.out.println("Resultado: " + ultimoResultado); // Debería usar Logger
+        return ultimoResultado;
     }
 
-    public int restar(int a, int b) {
-        return a - b;
+    public static int dividir(int a, int b) {
+        try {
+            return a / b;
+        } catch (Exception e) {
+            // Swallowing exception: mala práctica
+            return 0;
+        }
     }
-
-    public int multiplicar(int a, int b) {
-        return a * b;
-    }
-
-    public int dividir(int a, int b) {
-        return a / b; // No hay manejo de excepciones para división por cero
-    }
-
-    public int operacionCompleja(int a, int b, int c) {
-        int resultado = a + b;
-        resultado *= c;
-        resultado -= b;
-        resultado /= (a + 1);
-        resultado += 5;
-        return resultado;
-    }
-}
-
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
-
-public class CalculadoraTest {
-    Calculadora calculadora = new Calculadora();
 
     @Test
     public void testSumar() {
-        assertEquals(5, calculadora.sumar(2, 3));
-    }
-
-    @Test
-    public void testRestar() {
-        assertEquals(1, calculadora.restar(3, 2));
-    }
-
-    @Test
-    public void testMultiplicar() {
-        assertEquals(6, calculadora.multiplicar(2, 3));
+        int resultado = CalculadoraMala.sumar(2, 3);
+        assertEquals(5, resultado);
     }
 
     @Test
     public void testDividir() {
-        assertEquals(2, calculadora.dividir(6, 3));
+        int resultado = CalculadoraMala.dividir(10, 2);
+        assertEquals(5, resultado);
     }
 
     @Test
-    public void testOperacionCompleja() {
-        assertEquals(8, calculadora.operacionCompleja(2, 3, 4));
+    public void testDividirPorCero() {
+        int resultado = CalculadoraMala.dividir(10, 0);
+        assertEquals(0, resultado); // No lanza excepción, incorrecto
     }
 }
