@@ -29,6 +29,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.organization=<cr15v>
-            -Dsonar.projectKey=<cr15v_manejador-de-tareas>
+            -Dsonar.organization=cr15v
+            -Dsonar.projectKey=cr15v_manejador-de-tareas
             -Dsonar.host.url=https://sonarcloud.io
