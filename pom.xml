@@ -36,10 +36,21 @@
                 <version>0.8.7</version>
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
                         <goals>
-                            <goal>prepare-agent</goal>  <!-- Prepara el agente de cobertura -->
-                            <goal>report</goal>         <!-- Genera el informe de cobertura -->
+                            <goal>prepare-agent</goal> <!-- Prepara el agente para la cobertura -->
                         </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report</goal> <!-- Genera el informe de cobertura -->
+                        </goals>
+                        <configuration>
+                            <formats>
+                                <format>XML</format> <!-- Asegúrate de que se genere en formato XML -->
+                            </formats>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -53,8 +64,43 @@
         </plugins>
     </build>
 
+    <profiles>
+        <!-- Perfil para ejecutar las pruebas con cobertura -->
+        <profile>
+            <id>coverage</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.8.7</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                                <configuration>
+                                    <formats>
+                                        <format>XML</format> <!-- Reporte en formato XML para SonarCloud -->
+                                    </formats>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
     </properties>
+
 </project>
