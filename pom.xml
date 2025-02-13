@@ -11,6 +11,12 @@
     <name>manejador-de-tareas</name>
     <url>http://maven.apache.org</url>
 
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    </properties>
+
     <dependencies>
         <!-- Dependencias necesarias para el proyecto -->
         <dependency>
@@ -38,69 +44,41 @@
                     <execution>
                         <id>prepare-agent</id>
                         <goals>
-                            <goal>prepare-agent</goal> <!-- Prepara el agente para la cobertura -->
+                            <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
                         <id>report</id>
                         <goals>
-                            <goal>report</goal> <!-- Genera el informe de cobertura -->
+                            <goal>report</goal>
                         </goals>
                         <configuration>
                             <formats>
-                                <format>XML</format> <!-- Asegúrate de que se genere en formato XML -->
+                                <format>XML</format> <!-- Reporte en XML para SonarCloud -->
                             </formats>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
 
-            <!-- Plugin de Maven para compilar el proyecto -->
+            <!-- Plugin de Maven para ejecutar pruebas -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin de SonarCloud para análisis -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.9.1.2184</version>
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <!-- Perfil para ejecutar las pruebas con cobertura -->
-        <profile>
-            <id>coverage</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.7</version>
-                        <executions>
-                            <execution>
-                                <id>prepare-agent</id>
-                                <goals>
-                                    <goal>prepare-agent</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>report</id>
-                                <goals>
-                                    <goal>report</goal>
-                                </goals>
-                                <configuration>
-                                    <formats>
-                                        <format>XML</format> <!-- Reporte en formato XML para SonarCloud -->
-                                    </formats>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
-    <properties>
-        <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-    </properties>
-
 </project>
