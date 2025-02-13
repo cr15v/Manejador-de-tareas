@@ -1,4 +1,4 @@
-name: SonarQube Analysis (Windows)
+name: SonarCloud Analysis (Windows)
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   sonar:
-    name: SonarQube Scan
+    name: SonarCloud Scan
     runs-on: windows-latest
 
     steps:
@@ -22,12 +22,16 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+          cache: maven  # Habilita la caché de dependencias de Maven para optimizar tiempo
 
-      - name: Ejecutar pruebas con cobertura y generar reporte JaCoCo
-        run: mvn clean verify -Pcoverage  # Ejecuta el perfil coverage para generar el reporte
+      - name: Compilar el proyecto
+        run: mvn clean install
+
+      - name: Ejecutar pruebas con cobertura
+        run: mvn verify jacoco:report
 
       - name: Ejecutar análisis con SonarCloud
-        uses: SonarSource/sonarqube-scan-action@v4.1.0
+        uses: SonarSource/sonarcloud-github-action@v2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
@@ -35,4 +39,4 @@ jobs:
             -Dsonar.organization=cr15v
             -Dsonar.projectKey=cr15v_manejador-de-tareas
             -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml  # Especifica la ruta del reporte
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
